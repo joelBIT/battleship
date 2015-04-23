@@ -1,1 +1,3 @@
 # battleship
+
+Modified battleship game
