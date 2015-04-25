@@ -14,19 +14,17 @@ var shipsSunk = 0;
 
 // Ship constructor
 function Ship(length) {
-  this.length = length;
+  this.length = length;                        // Ships can have varying lengths
   this.coordinates = new Array();
 }
 
 // Define the ships prototype
-Ship.prototype.hits = 0;
-Ship.prototype.isSunk = false;
+Ship.prototype.hits = 0;                        // All ships start with 0 hits
+Ship.prototype.isSunk = false;                  // Initially no ship is sunk
 Ship.prototype.gotHit = function(location) {    // Register a hit
   this.hits++;
   var index = this.coordinates.indexOf(location);
-  console.log("before " + this.coordinates.length);
   this.coordinates.splice(index, 1);
-  console.log("after " + this.coordinates.length);
   if (this.hits === this.length) {
     var cell = document.getElementById(location);
     var sunk = document.createElement("img");
@@ -38,7 +36,9 @@ Ship.prototype.gotHit = function(location) {    // Register a hit
     gameOver();
   }
 };
-Ship.prototype.placeShip = function(length) {       // Place a ship on the board
+
+// Place a ship on the board
+function placeShip(ship) {
   var direction = Math.floor(Math.random()*2);
   var row, col;
   var tempLocations = new Array();  // Stores temporary ship coordinates
@@ -46,20 +46,18 @@ Ship.prototype.placeShip = function(length) {       // Place a ship on the board
   // Decide on which direction to lay out the ship
   if (direction === 1) {
     row = Math.floor(Math.random() * boardSize);
-    col = Math.floor(Math.random()*(boardSize - length));
+    col = Math.floor(Math.random()*(boardSize - ship.length));
   } else {
-    row = Math.floor(Math.random() * (boardSize - length));
+    row = Math.floor(Math.random() * (boardSize - ship.length));
     col = Math.floor(Math.random() * boardSize);
   }
 
   // Generate coordinates
-  for (var i = 0; i < length; i++) {
+  for (var i = 0; i < ship.length; i++) {
     if (direction === 1) {
       tempLocations.push(row + "" + (col + i));
-      console.log("generate: " + tempLocations[i]);
     } else {
       tempLocations.push((row + i) + "" + col);
-      console.log("generate: " + tempLocations[i]);
     }
   }
   
@@ -73,10 +71,8 @@ Ship.prototype.placeShip = function(length) {       // Place a ship on the board
   // If no collision were found, place the ship on the generated coordinates
   for (var i = 0; i < tempLocations.length; i++) {
     shipLocations.push(tempLocations[i]);
-    this.coordinates.push(tempLocations[i]);
+    ship.coordinates.push(tempLocations[i]);
   }
-  console.log("concat: " + shipLocations.length);
-  console.log(shipLocations[1]);
   return true;
 };
 
@@ -84,8 +80,7 @@ Ship.prototype.placeShip = function(length) {       // Place a ship on the board
 function gameOver() {
   if (shipsSunk === 4) {
     var gameElement = document.getElementById("board");
-    gameElement.id = "gameover";
-    gameElement.innerHTML = "Game Over";
+    setTimeout(function() {gameElement.id = "gameover"; gameElement.innerHTML = "Game Over";}, 1000);
   }
 }
 
@@ -95,10 +90,10 @@ function startGame() {
   ship2 = new Ship(2);
   ship3 = new Ship(3);
   ship4 = new Ship(4);
-  ship4.placeShip(4);
-  while (!ship3.placeShip(3)) {}
-  while (!ship2.placeShip(2)) {}
-  while (!ship1.placeShip(1)) {}
+  placeShip(ship4);
+  while (!placeShip(ship3)) {}
+  while (!placeShip(ship2)) {}
+  while (!placeShip(ship1)) {}
 }
 
 // Check if there is a ship or not in a cell
@@ -125,7 +120,7 @@ function fire(location) {
 
 // Set up handlers
 function initHandlers() {
-   document.getElementById("00").onclick = function() {
+  document.getElementById("00").onclick = function() {
     fire("00");
   };
   document.getElementById("01").onclick = function() {
