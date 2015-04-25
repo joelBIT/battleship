@@ -3,6 +3,9 @@
   Created on : Apr 23, 2015, 9:21:22 AM
   Author     : joel
 */
+
+@font-face { font-family: slkscr; src: url('slkscr.ttf'); } 
+
 div#board {
   position: relative;
   width: 1024px;
@@ -16,6 +19,7 @@ div#gameover {
   position: relative;
   margin: auto;
   color: green;
+  font-family: slkscr;
   font-size: 500%
 }
 
