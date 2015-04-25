@@ -28,12 +28,17 @@ Ship.prototype.gotHit = function(location) {    // Register a hit
   this.coordinates.splice(index, 1);
   console.log("after " + this.coordinates.length);
   if (this.hits === this.length) {
-    alert("ship sunk");
+    var cell = document.getElementById(location);
+    var sunk = document.createElement("img");
+    var source = document.createAttribute("src");
+    source.value = "sunken.png";
+    sunk.setAttributeNode(source);
+    cell.appendChild(sunk);
     shipsSunk++;
     gameOver();
   }
 };
-Ship.prototype.placeShip = function(length) {         // Place a ship on the board
+Ship.prototype.placeShip = function(length) {       // Place a ship on the board
   var direction = Math.floor(Math.random()*2);
   var row, col;
   var tempLocations = new Array();  // Stores temporary ship coordinates
@@ -91,17 +96,17 @@ function startGame() {
   ship3 = new Ship(3);
   ship4 = new Ship(4);
   ship4.placeShip(4);
-  console.log("s4c: " + ship4.coordinates.length);
   while (!ship3.placeShip(3)) {}
   while (!ship2.placeShip(2)) {}
-  console.log("s2c: " + ship2.coordinates.length);
   while (!ship1.placeShip(1)) {}
-  console.log(shipLocations.length);
 }
 
+// Check if there is a ship or not in a cell
 function fire(location) {
   var coordinates = document.getElementById(location);
-  if (shipLocations.indexOf(location) > -1) {
+  if (shipLocations.indexOf(location) > -1 && !coordinates.hasAttribute("class")) {
+    var audio = new Audio('boom.mp3');
+    audio.play();
     coordinates.setAttribute("class", "hit");
     if (ship4.coordinates.indexOf(location) > -1) {
       ship4.gotHit(location);
@@ -112,16 +117,15 @@ function fire(location) {
     } else {
       ship1.gotHit(location);
     }
-  } else {
+  } else if (!coordinates.hasAttribute("class")) {
     coordinates.setAttribute("class", "miss");
   }
   
 }
 
-// Initialize handlers
-window.onload = function() {
-  startGame();
-  document.getElementById("00").onclick = function() {
+// Set up handlers
+function initHandlers() {
+   document.getElementById("00").onclick = function() {
     fire("00");
   };
   document.getElementById("01").onclick = function() {
@@ -268,4 +272,10 @@ window.onload = function() {
   document.getElementById("66").onclick = function() {
     fire("66");
   };
+}
+
+// Load handlers and start game when page fully loaded
+window.onload = function() {
+  initHandlers();
+  startGame();
 };
