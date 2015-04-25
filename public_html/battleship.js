@@ -5,20 +5,19 @@ var ship2;
 var ship3;
 var ship4;
 
-// Used to see if a location contains a ship
+// Used to see if a location already contains a ship when placing new ships
 var shipLocations = new Array();
 
-var boardSize = 7;
-var numShips = 3;
-var shipsSunk = 0;
+var boardSize = 7;                          // Used for choosing ship location
+var shipsSunk = 0;                          // Initially no ships are sunk
 
 // Ship constructor
 function Ship(length) {
-  this.length = length;                        // Ships can have varying lengths
-  this.coordinates = new Array();
+  this.length = length;                     // Ships can have varying lengths
+  this.coordinates = new Array();           // Contains location of current ship
 }
 
-// Define the ships prototype
+// Define the ship prototype
 Ship.prototype.hits = 0;                        // All ships start with 0 hits
 Ship.prototype.isSunk = false;                  // Initially no ship is sunk
 Ship.prototype.gotHit = function(location) {    // Register a hit
@@ -46,7 +45,7 @@ function placeShip(ship) {
   // Decide on which direction to lay out the ship
   if (direction === 1) {
     row = Math.floor(Math.random() * boardSize);
-    col = Math.floor(Math.random()*(boardSize - ship.length));
+    col = Math.floor(Math.random() * (boardSize - ship.length));
   } else {
     row = Math.floor(Math.random() * (boardSize - ship.length));
     col = Math.floor(Math.random() * boardSize);
@@ -115,7 +114,6 @@ function fire(location) {
   } else if (!coordinates.hasAttribute("class")) {
     coordinates.setAttribute("class", "miss");
   }
-  
 }
 
 // Set up handlers
@@ -269,7 +267,7 @@ function initHandlers() {
   };
 }
 
-// Load handlers and start game when page fully loaded
+// Add handlers and start game when page fully loaded
 window.onload = function() {
   initHandlers();
   startGame();
