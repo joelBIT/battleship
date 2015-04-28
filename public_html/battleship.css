@@ -16,11 +16,14 @@ div#board {
 
 div#gameover {
   background-color: black;
-  position: relative;
   margin: auto;
   color: green;
   font-family: slkscr;
-  font-size: 500%
+  font-size: 500%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
 body {
