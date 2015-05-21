@@ -26,11 +26,10 @@ Ship.prototype.gotHit = function(location) {    // Register a hit
   this.coordinates.splice(index, 1);
   if (this.hits === this.length) {
     var cell = document.getElementById(location);
-    var sunk = document.createElement("img");
-    var source = document.createAttribute("src");
-    source.value = "sunken.png";
-    sunk.setAttributeNode(source);
-    cell.appendChild(sunk);
+    var img = $('<img />', { 
+      src: 'sunken.png'
+    });
+    img.appendTo($(cell));
     shipsSunk++;
     gameOver();
   }
